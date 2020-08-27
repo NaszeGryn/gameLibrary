@@ -5,7 +5,7 @@
 namespace GraphFunc {
 	// Draws text on the screen
 	static void DrawText(sf::Vector2f pos, std::string textf,
-		sf::Font* font, unsigned int fontSize, sf::RenderWindow* window) {
+		sf::Font* font, unsigned int fontSize, sf::RenderTarget* window) {
 
 		sf::Text text(textf, *font, fontSize);
 		text.setPosition(pos);
@@ -28,12 +28,29 @@ namespace GraphFunc {
 		return text;
 	}
 
+	// creates text
+	static void getText(sf::Text* ptr, std::string textf, sf::Font* font,
+		unsigned int fontSize, sf::Vector2f pos = sf::Vector2f(0.f, 0.f)) {
+
+		ptr = new sf::Text(textf, *font, fontSize);
+		ptr->setPosition(pos);
+		ptr->setFillColor(sf::Color::White);
+		ptr->setOutlineColor(sf::Color::Black);
+		ptr->setOutlineThickness(1.f);
+	}
+
 	// Returns Texture 
 	static sf::Texture loadHQTexture(std::string location) {
 		sf::Texture texture;
 		texture.loadFromFile(location);
 		texture.setSmooth(true);
 		return texture;
+	}
+
+	// loads Texture 
+	static void loadHQTexture(sf::Texture* ptr, std::string location) {
+		ptr->loadFromFile(location);
+		ptr->setSmooth(true);
 	}
 
 	// Creates and saves screenshots
@@ -55,5 +72,13 @@ namespace GraphFunc {
 
 		img = txt.copyToImage();
 		img.saveToFile(string);
+	}
+
+	//scales texture
+	static void scaleTexture(sf::Sprite* texture, sf::Vector2f size) {
+		float scaleX = size.x / texture->getTexture()->getSize().x;
+		float scaleY = size.y / texture->getTexture()->getSize().y;
+
+		texture->scale(scaleX, scaleY);
 	}
 }
