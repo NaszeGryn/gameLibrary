@@ -138,6 +138,15 @@ namespace Collisions {
 
 		return sqrt(pow((col1->getPos() - col2->getPos()).x, 2) + pow((col1->getPos() - col2->getPos()).y, 2)) < col1->getRadius() + col2->getRadius();
 	}
+
+	static bool listCollider(Collider* col1, std::vector<Collider*>* col) {
+		for (int i = 0; i < col->size(); i++) {
+			if (singleCollider(col1, col->at(i))) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
 
 
