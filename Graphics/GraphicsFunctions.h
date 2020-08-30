@@ -53,6 +53,19 @@ namespace GraphFunc {
 		ptr->setSmooth(true);
 	}
 
+	// Returns Texture
+	static sf::Font loadFont(std::string location) {
+		sf::Font font;
+		font.loadFromFile(location);
+		return font;
+	}
+
+	// loads Texture
+	static void loadFont(sf::Font* ptr, std::string location) {
+		ptr->loadFromFile(location);
+	}
+
+
 	// Creates and saves screenshots
 	static void do_ScreenShot(sf::RenderWindow* window, std::string location) {
 		std::string string = location + "screenshot_";
