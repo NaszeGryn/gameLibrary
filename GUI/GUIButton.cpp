@@ -1,7 +1,5 @@
 #include "GUI.h"
 
-#define defaultGuiColor sf::Color(40, 40, 40, 180)
-
 namespace GUI {
 	// button class
 	Button::Button(
