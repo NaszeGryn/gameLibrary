@@ -39,6 +39,13 @@ namespace GraphFunc {
 		ptr->setOutlineThickness(1.f);
 	}
 
+	// changes VertexArray color
+	static void changeVerArrColor(sf::VertexArray& array, sf::Color color) {
+		for (size_t i = 0; i < array.getVertexCount(); i++) {
+			array[i].color = color;
+		}
+	}
+
 	// Returns Texture 
 	static sf::Texture loadHQTexture(std::string location) {
 		sf::Texture texture;
@@ -79,7 +86,7 @@ namespace GraphFunc {
 		tm time;
 		localtime_s(&time, &t);
 
-		string += std::to_string(1900 + time.tm_year) + "_" + std::to_string(time.tm_mday) + "_" +
+		string += std::to_string(1900 + time.tm_year) + "_" + std::to_string(time.tm_mon + 1) +"_" + std::to_string(time.tm_mday) + "_" +
 			std::to_string(time.tm_hour) + "_" + std::to_string(time.tm_min) + "_" + std::to_string(time.tm_sec) + ".png";
 	
 
@@ -94,4 +101,14 @@ namespace GraphFunc {
 
 		texture->scale(scaleX, scaleY);
 	}
+
+	//scales texture
+	static sf::Sprite scaleTextureR(sf::Sprite* texture, sf::Vector2f size) {
+		float scaleX = size.x / texture->getTexture()->getSize().x;
+		float scaleY = size.y / texture->getTexture()->getSize().y;
+
+		texture->scale(scaleX, scaleY);
+		return *texture;
+	}
+
 }
