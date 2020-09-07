@@ -71,7 +71,7 @@ namespace Particles {
 			this->color = color;
 			this->type = type;
 
-			rot *= 3.14159 / 180;
+			rot *= 3.14159 / 180.f;
 			
 			this->move = sf::Vector2f(0.f, speed);
 			this->move = sf::Vector2f(-speed * sin(rot), speed * cos(rot));
@@ -82,7 +82,7 @@ namespace Particles {
 			this->particles.resize(particle_amount);
 			this->pos = pos;
 
-			for (int i = 0; i < particles.size(); i++) {
+			for (size_t i = 0; i < particles.size(); i++) {
 				this->particles[i] = NULL;
 			}
 
@@ -93,7 +93,7 @@ namespace Particles {
 		}
 
 		void Draw(sf::RenderTarget* target) {
-			for (int i = 0; i < particles.size(); i++) {
+			for (size_t i = 0; i < particles.size(); i++) {
 				if (this->particles[i] != NULL)
 					this->particles[i]->draw(target);
 			}
@@ -101,7 +101,7 @@ namespace Particles {
 
 		void Update(float dtime) {
 			int maxu = 0;
-			for (int i = 0; i < particles.size(); i++) {
+			for (size_t i = 0; i < particles.size(); i++) {
 				if (this->particles[i] != NULL) {
 					this->particles[i]->update(dtime);
 
@@ -121,7 +121,7 @@ namespace Particles {
 							angle = rand() % 360 + (float)rand() / (float)RAND_MAX;
 						}
 
-						angle *= 3.14159 / 180;
+						angle *= 3.14159 / 180.f;
 						sf::Vector2f a(move.x * cos(angle) - move.y * sin(angle),
 							move.x * sin(angle) + move.y * cos(angle));
 						this->particles[i] = new Particle(size, a, pos, alpha_change, color);

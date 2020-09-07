@@ -2,14 +2,14 @@
 #include <SFML/Graphics.hpp>
 #include <cmath>
 
-#define MATH_NEWSEED() srand(int(time(NULL) ) )
-#define MATH_PI 3.1415926535897932384626433
-#define MATH_RADIAN 180/MATH_PI
+#define gL_MATH_NEWSEED() srand(int(time(NULL) ) )
+#define gL_MATH_PI 3.1415926535897932384626433
+#define gL_MATH_RADIAN 180/MATH_PI
 
 
-#define V2FZERO sf::Vector2f(0.f, 0.f)
-#define V2IZERO sf::Vector2i(0, 0)
-#define V2UZERO sf::Vector2u(0U, 0U)
+#define gL_V2FZERO sf::Vector2f(0.f, 0.f)
+#define gL_V2IZERO sf::Vector2i(0, 0)
+#define gL_V2UZERO sf::Vector2u(0U, 0U)
 
 namespace Math {
 	// Returns distance
@@ -78,7 +78,7 @@ namespace Math {
 
 	// rotates point around (0,0)
 	static sf::Vector2f rotateArZero(sf::Vector2f point, float angle) {
-		angle *= 3.14159 / 180;
+		angle *= 3.14159 / 180.f;
 		return sf::Vector2f(point.x * cos(angle) - point.y * sin(angle),
 							point.x * sin(angle) + point.y * cos(angle));
 	}

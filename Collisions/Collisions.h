@@ -57,7 +57,7 @@ namespace Collisions {
 		}
 
 		sf::Vector2f getPos() override {
-			return sf::Vector2f(rect.left, rect.top);
+			return sf::Vector2f((float)rect.left, (float)rect.top);
 		}
 
 		sf::IntRect rect;
@@ -140,7 +140,7 @@ namespace Collisions {
 	}
 
 	static bool listCollider(Collider* col1, std::vector<Collider*>* col) {
-		for (int i = 0; i < col->size(); i++) {
+		for (size_t i = 0; i < col->size(); i++) {
 			if (singleCollider(col1, col->at(i))) {
 				return true;
 			}
