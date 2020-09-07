@@ -4,11 +4,13 @@ namespace GUI {
 	// button class
 	Button::Button(
 		sf::Vector2f pos, sf::Vector2f size, sf::Text* text,
-		sf::Color color
+		sf::Color color, std::string ID
 	)
 	{
+		this->event = Event::None;
 		this->color = color;
 		this->alpha = 180.f;
+		this->ID = ID;
 		// shape
 		{
 			this->shape = new sf::RectangleShape(size);
@@ -39,10 +41,10 @@ namespace GUI {
 		target->draw(*text);
 	}
 
-	void Button::Update(float deltaTime) {
+	void Button::Update(float deltaTime, sf::RenderWindow* window) {
 		// alpha 180 - 240
 		if (this->shape->getGlobalBounds().contains(
-			sf::Vector2f(sf::Mouse::getPosition()))) {
+			sf::Vector2f(sf::Mouse::getPosition(*window)))) {
 			
 			if (this->alpha < 240) {
 				this->alpha += deltaTime * 60;
@@ -58,7 +60,6 @@ namespace GUI {
 		}
 
 		this->color.a = (uint8_t)alpha;
-		log(alpha);
 		this->shape->setFillColor(color);
 	}
 
@@ -73,13 +74,26 @@ namespace GUI {
 	}
 
 	Event Button::getEvent() {
-		Event ev = this->event;
-		this->event = Event::None;
-		return ev;
+		if (this->event != Event::None) {
+			Event eve = this->event;
+			this->event = Event::None;
+			return eve;
+		}
+		return this->event;
 	}
 
 	ElementType Button::getType() {
 		return ElementType::Button;
+	}
+
+	sf::Vector2f Button::maxRD() {
+		sf::FloatRect fR = this->shape->getGlobalBounds();
+		return sf::Vector2f(fR.left + fR.width, fR.top + fR.height);
+	}
+
+	sf::Vector2f Button::minRD() {
+		sf::FloatRect fR = this->shape->getGlobalBounds();
+		return sf::Vector2f(fR.left, fR.top);
 	}
 
 }

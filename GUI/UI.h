@@ -4,6 +4,7 @@
 #include <strstream>
 
 #define gL_isKeyPressed(key) sf::Keyboard::isKeyPressed(key)
+#define gL_getRelativeMousePos(window) sf::Vector2f(sf::Mouse::getPosition(window))
 
 namespace UI {
 	class File {
