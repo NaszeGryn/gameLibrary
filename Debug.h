@@ -1,7 +1,7 @@
 #pragma once
 #ifdef DEBUG
-#define log(x) std::cout << x << std::endl
+#define gL_log(x) std::cout << x << std::endl
 #include <iostream>
 #else
-#define log(x)
+#define gL_log(x)
 #endif
