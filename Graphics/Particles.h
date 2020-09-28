@@ -12,7 +12,8 @@ namespace Particles {
 	// Particle class
 	class Particle {
 	public:
-		Particle(float size, sf::Vector2f move, sf::Vector2f pos, float alpha_change, sf::Color color) {
+		// constructor Particle(float size, sf::Vector2f move, sf::Vector2f pos, float alpha_change, sf::Color color)
+		Particle(float size, sf::Vector2f& move, sf::Vector2f& pos, float alpha_change, sf::Color& color) {
 			this->shape = new sf::CircleShape(size);
 			this->move = move;
 			this->alpha_change = alpha_change;
@@ -29,25 +30,31 @@ namespace Particles {
 			this->shape = NULL;
 		}
 
+		void set(sf::Vector2f& move, sf::Vector2f& pos) {
+			this->move = move;
+
+			this->shape->setPosition(pos);
+
+			this->alpha = 255;
+			this->color = color;
+		}
+
 		void update(float dtime) {
-			if (alpha > 0) {
+			if (alpha > 10) {
 				this->shape->move(this->move * dtime);
 				this->alpha -= this->alpha_change * dtime;
 
 				this->color.a = (uint8_t) this->alpha;
 				this->shape->setFillColor(color);
 			}
-
 		}
 
 		void draw(sf::RenderTarget* target) {
-			if (this->alpha > 0) {
-				target->draw(*shape);
-			}
+			target->draw(*shape);
 		}
 
 		bool finished() {
-			return this->alpha <= 0;
+			return this->alpha <= 10.f;
 		}
 
 	private:
@@ -64,6 +71,8 @@ namespace Particles {
 	// Particle handler
 	class ParticleHandler {
 	public:
+		// constructor (float size, float rot, sf::Vector2f pos, float alpha_change,
+		//sf::Color color, Type type, int span, float speed, int particle_amount)
 		ParticleHandler(float size, float rot, sf::Vector2f pos, float alpha_change,
 				sf::Color color, Type type, int span, float speed, int particle_amount) {
 
@@ -71,7 +80,7 @@ namespace Particles {
 			this->color = color;
 			this->type = type;
 
-			rot *= 3.14159 / 180.f;
+			rot *= 3.14159f / 180.f;
 			
 			this->move = sf::Vector2f(0.f, speed);
 			this->move = sf::Vector2f(-speed * sin(rot), speed * cos(rot));
@@ -92,48 +101,83 @@ namespace Particles {
 			this->particles.clear();
 		}
 
+		void Add_Particle(int index) {
+			float angle = 0.f;
+			if (this->type == Type::Line) {
+				if (span != 0)
+					angle = float((rand() % span * 2) - span) + (float)rand() / (float)RAND_MAX;
+			}
+			else {
+				angle = rand() % 360 + (float)rand() / (float)RAND_MAX;
+			}
+
+			angle *= 3.14159f / 180.f;
+			sf::Vector2f a(move.x * cos(angle) - move.y * sin(angle),
+				move.x * sin(angle) + move.y * cos(angle));
+			this->particles[index] = new Particle(size, a, pos, alpha_change, color);
+		}
+
+		void Reset_Particle(int index) {
+			float angle = 0.f;
+			if (this->type == Type::Line) {
+				if (span != 0)
+					angle = float((rand() % span * 2) - span) + (float)rand() / (float)RAND_MAX;
+			}
+			else {
+				angle = rand() % 360 + (float)rand() / (float)RAND_MAX;
+			}
+
+			angle *= 3.14159f / 180.f;
+			sf::Vector2f a(move.x * cos(angle) - move.y * sin(angle),
+				move.x * sin(angle) + move.y * cos(angle));
+			(*this->particles[index]).set(a, pos);
+		}
+
 		void Draw(sf::RenderTarget* target) {
-			for (size_t i = 0; i < particles.size(); i++) {
-				if (this->particles[i] != NULL)
-					this->particles[i]->draw(target);
+			if (adding) {
+				for (size_t i = 0; i < particles.size(); i++) {
+					if (this->particles[i] != NULL) {
+						if (!this->particles[i]->finished()) {
+							this->particles[i]->draw(target);
+						}
+					}
+				}
 			}
 		}
 
 		void Update(float dtime) {
-			int maxu = 0;
-			for (size_t i = 0; i < particles.size(); i++) {
-				if (this->particles[i] != NULL) {
-					this->particles[i]->update(dtime);
-
-					if (this->particles[i]->finished()) {
-						delete this->particles[i];
-						this->particles[i] = NULL;
+			if (adding) {
+				int maxu = 0;
+				for (size_t i = 0; i < particles.size(); i++) {
+					if (this->particles[i] != NULL) {
+						if (this->particles[i]->finished() && maxu < 2 && adding) {
+							this->Reset_Particle(i);
+							maxu++;
+						}
+						
+						this->particles[i]->update(dtime);
 					}
-				}
-				else {
-					if (maxu < 10 && adding) {
-						float angle = 0.f;
-						if (this->type == Type::Line) {
-							if (span != 0)
-								angle = float((rand() % span * 2) - span) + (float)rand() / (float)RAND_MAX;
+					else {
+						if (maxu < 1 && adding) {
+							this->Add_Particle(i);
+							maxu++;
 						}
-						else {
-							angle = rand() % 360 + (float)rand() / (float)RAND_MAX;
-						}
-
-						angle *= 3.14159 / 180.f;
-						sf::Vector2f a(move.x * cos(angle) - move.y * sin(angle),
-							move.x * sin(angle) + move.y * cos(angle));
-						this->particles[i] = new Particle(size, a, pos, alpha_change, color);
-
-						maxu++;
 					}
 				}
 			}
 		}
 
-		void setAdding(bool adding) {
-			this->adding = adding;
+		void setAdding(bool add) {
+			if (add && !this->adding) {
+				for (int i = 0; i < particles.size() / 2.f; i++) {
+					if (particles[i] != NULL) {
+						delete particles[i];
+						particles[i] = NULL;
+					}
+					Add_Particle(i);
+				}
+			}
+			this->adding = add;
 		}
 
 		bool getAdding() {
