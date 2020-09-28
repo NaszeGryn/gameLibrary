@@ -41,6 +41,11 @@ namespace Math {
 		return angle;
 	}
 
+	static float getTriangleArea(sf::Vector2f a, sf::Vector2f b, sf::Vector2f c) {
+		return abs(a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x*(a.y - b.y)) / 2.f;
+
+	}
+
 	// returns absolute value of Vector2fs
 	static sf::Vector2f v2fAbs(sf::Vector2f a) {
 		return sf::Vector2f(abs(a.x), abs(a.y));
@@ -78,7 +83,7 @@ namespace Math {
 
 	// rotates point around (0,0)
 	static sf::Vector2f rotateArZero(sf::Vector2f point, float angle) {
-		angle *= 3.14159 / 180.f;
+		angle *= 3.14159f / 180.f;
 		return sf::Vector2f(point.x * cos(angle) - point.y * sin(angle),
 							point.x * sin(angle) + point.y * cos(angle));
 	}
