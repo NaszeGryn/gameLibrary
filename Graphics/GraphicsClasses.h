@@ -169,7 +169,7 @@ namespace Draw {
 			this->shape = new sf::CircleShape(size);
 			this->shape->setPosition(position);
 			this->shape->setFillColor(color);
-			this->shape->setOrigin(sf::Vector2f(size / 2.f, size / 2.f));
+			this->shape->setOrigin(sf::Vector2f(size, size));
 		}
 		~Point() {
 			delete this->shape;

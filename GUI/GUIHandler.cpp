@@ -27,10 +27,10 @@ namespace GUI {
 		}
 
 
-		if (element->maxRD().x >= this->mRD.x) {
+		if (element->maxRD().x >= this->mRD.x + this->miRD.x) {
 			this->mRD.x = element->maxRD().x - this->miRD.x + margin;
 		}
-		if (element->maxRD().y >= this->mRD.y) {
+		if (element->maxRD().y >= this->mRD.y + this->miRD.y) {
 			this->mRD.y = element->maxRD().y - this->miRD.y + margin;
 		}
 
@@ -80,6 +80,11 @@ namespace GUI {
 			return this->elements[index]->getValue();
 		return 0;
 	}
+	std::string GUIHandler::getIBValue(int index) {
+		if (index < this->elements.size() && index >= 0)
+			return this->elements[index]->getIBValue();
+		return 0;
+	}
 
 
 	Event GUIHandler::getEvent(std::string ID) {
@@ -105,6 +110,15 @@ namespace GUI {
 			}
 		}
 		return 0;
+	}
+
+	std::string GUIHandler::getIBValue(std::string ID) {
+		for (int i = 0; i < this->elements.size(); i++) {
+			if (elements[i]->getID() == ID) {
+				return elements[i]->getIBValue();
+			}
+		}
+		return "";
 	}
 
 	int GUIHandler::getIndex(std::string ID) {
