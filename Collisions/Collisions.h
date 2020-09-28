@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 
 namespace Collisions {
+	//(a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x*(a.y - b.y)) / 2.f
 	enum class ColliderType {
 		Box = 0,
 		Circle = 1
@@ -13,6 +14,7 @@ namespace Collisions {
 		virtual sf::IntRect getRect() = 0;
 		virtual float getRadius() = 0;
 		virtual sf::Vector2f getPos() = 0;
+	
 	};
 
 	// Box collider
@@ -22,16 +24,16 @@ namespace Collisions {
 			this->UpdateCollider(pos, size, origin);
 		}
 
-		BoxCollider(sf::RectangleShape shape) {
+		BoxCollider(sf::RectangleShape* shape) {
 			this->UpdateCollider(shape);
 		}
 
-		void UpdateCollider(sf::RectangleShape shape) {
-			rect.left = (int)shape.getPosition().x - (int)shape.getOrigin().x;
-			rect.top = (int)shape.getPosition().y - (int)shape.getOrigin().y;
+		void UpdateCollider(sf::RectangleShape* shape) {
+			rect.left = (int)shape->getPosition().x - (int)shape->getOrigin().x;
+			rect.top = (int)shape->getPosition().y - (int)shape->getOrigin().y;
 
-			rect.width = (int)shape.getSize().x;
-			rect.height = (int)shape.getSize().y;
+			rect.width = (int)shape->getSize().x;
+			rect.height = (int)shape->getSize().y;
 		}
 
 		void UpdateCollider(sf::Vector2f pos, sf::Vector2f size, sf::Vector2f origin = sf::Vector2f(0.f, 0.f)) {
