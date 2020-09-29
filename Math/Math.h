@@ -58,7 +58,7 @@ namespace Math {
 
 	// returns random float
 	static float randomF(int a, int b) {
-		return float(rand() % int(a - b)) + (float)rand() / (float)RAND_MAX;
+		return float(randomI(a, b-1)) + (float)rand() / (float)RAND_MAX;
 	}
 
 	// returns random Vector2i
