@@ -7,4 +7,6 @@
 
 #include "GUI/GUI.h"
 
+#include "Network/Network.h"
+
 // MADE USING SFML

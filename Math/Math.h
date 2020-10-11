@@ -17,8 +17,8 @@ namespace Math {
 		return sqrt( pow((a - b).x, 2) + pow((a - b).y, 2) );
 	}
 
-	// Returns normalized distance
-	static sf::Vector2f normDist(sf::Vector2f a, sf::Vector2f b) {
+	// Returns normalized vector
+	static sf::Vector2f normVec(sf::Vector2f a, sf::Vector2f b) {
 		return (a - b) / dist(a, b);
 	}
 
@@ -69,6 +69,34 @@ namespace Math {
 	// returns random Vector2f
 	static sf::Vector2f randomVecF(int xmin, int xmax, int ymin, int ymax) {
 		return sf::Vector2f(float(randomF(xmin, xmax)), float(randomF(ymin, ymax)));
+	}
+
+	static char getRandomChar() {
+		int f = randomI(0, 3);
+		switch (f) {
+		// numbers
+		case 0:
+			return randomI(0x30, 0x3A);
+			break;
+		//lower case
+		case 1:
+			return randomI(0x61, 0x7B);
+			break;
+		//upper case
+		case 2:
+			return randomI(0x41, 0x5B);
+			break;
+		}
+		return NULL;
+	}
+
+	static std::string getRandomString(uint32_t length) {
+		std::string s = "";
+
+		for (int i = 0; i < length; i++)
+			s += getRandomChar();
+
+		return s;
 	}
 
 	// returns avg
@@ -131,9 +159,94 @@ namespace Math {
 			this->deltaTime = clock->restart().asSeconds();
 		}
 
-		float deltaTime;
+		double deltaTime;
 
 	private:
 		sf::Clock* clock;
 	};
+
+	class ColorF {
+	public:
+		ColorF(float r = 0.f, float g = 0.f, float b = 0.f, float a = 255.f) {
+			this->r = r;
+			this->g = g;
+			this->b = b;
+			this->a = a;
+			this->check();
+		}
+
+		ColorF(sf::Color color) {
+			this->r = color.r;
+			this->g = color.g;
+			this->b = color.b;
+			this->a = color.a;
+			this->check();
+		}
+
+
+
+		void check() {
+			//r
+			check_One(r);
+			//g
+			check_One(g);
+			//b
+			check_One(b);
+			//a
+			check_One(a);
+		}
+
+		sf::Color getColor() {
+			this->check();
+
+			return sf::Color((uint8_t)r, (uint8_t)g, (uint8_t)b, (uint8_t)a);
+		}
+
+		void add(ColorF x) {
+			this->r += x.r;
+			this->g += x.g;
+			this->b += x.b;
+			this->a += x.a;
+			this->check();
+		}
+
+		void subtract(ColorF x) {
+			this->r -= x.r;
+			this->g -= x.g;
+			this->b -= x.b;
+			this->a -= x.a;
+			this->check();
+		}
+
+		void multiply(float x) {
+			this->r *= x;
+			this->g *= x;
+			this->b *= x;
+			this->a *= x;
+			this->check();
+		}
+
+		float r;
+		float g;
+		float b;
+		float a;
+
+	private:
+		void check_One(float& x) {
+			if (x > 255.f)
+				x = 255.f;
+			else if (x < 0.f)
+				x = 0.f;
+		}
+	
+	};
+}
+
+namespace Logic {
+	static bool XOR(bool a, bool b) {
+		return (a || b) && !(a && b);
+	}
+	static bool XNOR(bool a, bool b) {
+		return !((a || b) && !(a && b));
+	}
 }

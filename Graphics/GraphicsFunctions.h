@@ -40,9 +40,9 @@ namespace GraphFunc {
 	}
 
 	// changes VertexArray color
-	static void changeVerArrColor(sf::VertexArray& array, sf::Color color) {
-		for (size_t i = 0; i < array.getVertexCount(); i++) {
-			array[i].color = color;
+	static void changeVerArrColor(sf::VertexArray* array, sf::Color color) {
+		for (size_t i = 0; i < array->getVertexCount(); i++) {
+			(*array)[i].color = color;
 		}
 	}
 
@@ -50,14 +50,15 @@ namespace GraphFunc {
 	static sf::Texture loadHQTexture(std::string location) {
 		sf::Texture texture;
 		texture.loadFromFile(location);
+			
 		texture.setSmooth(true);
 		return texture;
 	}
 
 	// loads Texture 
-	static void loadHQTexture(sf::Texture* ptr, std::string location) {
-		ptr->loadFromFile(location);
+	static bool loadHQTexture(sf::Texture* ptr, std::string location) {
 		ptr->setSmooth(true);
+		return ptr->loadFromFile(location);
 	}
 
 	// Returns Texture
@@ -68,8 +69,8 @@ namespace GraphFunc {
 	}
 
 	// loads Texture
-	static void loadFont(sf::Font* ptr, std::string location) {
-		ptr->loadFromFile(location);
+	static bool loadFont(sf::Font* ptr, std::string location) {
+		return ptr->loadFromFile(location);
 	}
 
 
