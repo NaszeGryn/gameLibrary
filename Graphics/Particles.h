@@ -57,6 +57,10 @@ namespace Particles {
 			return this->alpha <= 10.f;
 		}
 
+		sf::Vector2f getPos() {
+			return this->shape->getPosition();
+		}
+
 	private:
 		sf::CircleShape* shape;
 
@@ -76,26 +80,12 @@ namespace Particles {
 		ParticleHandler(float size, float rot, sf::Vector2f pos, float alpha_change,
 				sf::Color color, Type type, int span, float speed, int particle_amount) {
 
-			this->size = size;
-			this->color = color;
-			this->type = type;
-
-			rot *= 3.14159f / 180.f;
-			
-			this->move = sf::Vector2f(0.f, speed);
-			this->move = sf::Vector2f(-speed * sin(rot), speed * cos(rot));
-
-			this->span = span;
-			this->alpha_change = alpha_change;
-
-			this->particles.resize(particle_amount);
-			this->pos = pos;
+			this->ReConstruct(size, rot, pos, alpha_change,
+				color, type, span, speed, particle_amount);
 
 			for (size_t i = 0; i < particles.size(); i++) {
 				this->particles[i] = NULL;
 			}
-
-			this->adding = true;
 		}
 		~ParticleHandler() {
 			this->particles.clear();
@@ -112,8 +102,8 @@ namespace Particles {
 			}
 
 			angle *= 3.14159f / 180.f;
-			sf::Vector2f a(move.x * cos(angle) - move.y * sin(angle),
-				move.x * sin(angle) + move.y * cos(angle));
+			sf::Vector2f a(move.x * cosf(angle) - move.y * sinf(angle),
+				move.x * sinf(angle) + move.y * cosf(angle));
 			this->particles[index] = new Particle(size, a, pos, alpha_change, color);
 		}
 
@@ -134,11 +124,21 @@ namespace Particles {
 		}
 
 		void Draw(sf::RenderTarget* target) {
-			if (adding) {
+			bool atZero = false;
+			if (this->drawing) {
 				for (size_t i = 0; i < particles.size(); i++) {
 					if (this->particles[i] != NULL) {
 						if (!this->particles[i]->finished()) {
-							this->particles[i]->draw(target);
+
+							if (this->particles[i]->getPos() == this->pos) {
+								if (!atZero) {
+									this->particles[i]->draw(target);
+									atZero = true;
+								}
+							}
+							else {
+								this->particles[i]->draw(target);
+							}
 						}
 					}
 				}
@@ -146,11 +146,11 @@ namespace Particles {
 		}
 
 		void Update(float dtime) {
-			if (adding) {
+			if (drawing) {
 				int maxu = 0;
 				for (size_t i = 0; i < particles.size(); i++) {
 					if (this->particles[i] != NULL) {
-						if (this->particles[i]->finished() && maxu < 2 && adding) {
+						if (this->particles[i]->finished() && maxu < 1 && adding) {
 							this->Reset_Particle(i);
 							maxu++;
 						}
@@ -167,22 +167,40 @@ namespace Particles {
 			}
 		}
 
-		void setAdding(bool add) {
-			if (add && !this->adding) {
-				for (int i = 0; i < particles.size() / 2.f; i++) {
-					if (particles[i] != NULL) {
-						delete particles[i];
-						particles[i] = NULL;
-					}
-					Add_Particle(i);
-				}
-			}
-			this->adding = add;
-		}
+		void clearMem();
+		void creatMem();
 
-		bool getAdding() {
-			return this->adding;
-		}
+		void ReConstruct(float size, float rot, sf::Vector2f pos, float alpha_change,
+			sf::Color color, Type type, int span, float speed, int particle_amount);
+
+		// Setting and getting
+		void setDrawing(bool draw);
+		bool getDrawing();
+
+		void setAdding(bool add);
+
+		bool getAdding();
+
+		void changePos(sf::Vector2f newPos);
+		sf::Vector2f getPos();
+
+		void changeColor(sf::Color newColor);
+		sf::Color getColor();
+
+		void changeSpan(int newSpan);
+		int getSpan();
+
+		void changeType(Type newType);
+		Type getType();
+
+		void changeMoveVector(sf::Vector2f newMove);
+		sf::Vector2f getMove();
+
+		void changeSize(float newSize);
+		float getSize();
+		
+		void changeAlphaChange(float newAlpha_change);
+		float getAlpha_change();
 
 	private:
 		std::vector<Particle*> particles;
@@ -198,5 +216,6 @@ namespace Particles {
 
 	private:
 		bool adding;
+		bool drawing;
 	};
 }
