@@ -83,15 +83,15 @@ namespace GUI {
 	std::string GUIHandler::getIBValue(int index) {
 		if (index < this->elements.size() && index >= 0)
 			return this->elements[index]->getIBValue();
-		return 0;
+		return "";
 	}
 
 
 	Event GUIHandler::getEvent(std::string ID) {
 		for (int i = 0; i < this->elements.size(); i++) {
-			if (elements[i]->getID() == ID) {
+			if (elements[i]->getID() == ID)
 				return elements[i]->getEvent();
-			}
+			
 		}
 		return Event::None;
 	}
