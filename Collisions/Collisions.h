@@ -148,7 +148,7 @@ namespace Collisions {
 	};
 
 
-	bool collide(Collider* a, Collider* b) {
+	static bool collide(Collider* a, Collider* b) {
 
 		if (a->getType() == ColliderType::Circle &&
 			b->getType() == ColliderType::Circle) {
