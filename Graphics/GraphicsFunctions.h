@@ -4,7 +4,7 @@
 
 namespace GraphFunc {
 	// Draws text on the screen
-	static void DrawText(sf::Vector2f pos, std::string textf,
+	static void DrawText(sf::Vector2f pos, const std::string& textf,
 		sf::Font* font, unsigned int fontSize, sf::RenderTarget* window) {
 
 		sf::Text text(textf, *font, fontSize);
@@ -16,7 +16,7 @@ namespace GraphFunc {
 	}
 
 	// Returns text
-	static sf::Text getText(std::string textf, sf::Font* font,
+	static sf::Text getText(const std::string& textf, sf::Font* font,
 		unsigned int fontSize, sf::Vector2f pos = sf::Vector2f(0.f, 0.f)) {
 
 		sf::Text text(textf, *font, fontSize);
@@ -29,7 +29,7 @@ namespace GraphFunc {
 	}
 
 	// creates text
-	static void getText(sf::Text* ptr, std::string textf, sf::Font* font,
+	static void getText(sf::Text* ptr, const std::string& textf, sf::Font* font,
 		unsigned int fontSize, sf::Vector2f pos = sf::Vector2f(0.f, 0.f)) {
 
 		ptr = new sf::Text(textf, *font, fontSize);
@@ -47,7 +47,7 @@ namespace GraphFunc {
 	}
 
 	// Returns Texture 
-	static sf::Texture loadHQTexture(std::string location) {
+	static sf::Texture loadHQTexture(const std::string& location) {
 		sf::Texture texture;
 		texture.loadFromFile(location);
 			
@@ -56,26 +56,26 @@ namespace GraphFunc {
 	}
 
 	// loads Texture 
-	static bool loadHQTexture(sf::Texture* ptr, std::string location) {
+	static bool loadHQTexture(sf::Texture* ptr, const std::string& location) {
 		ptr->setSmooth(true);
 		return ptr->loadFromFile(location);
 	}
 
 	// Returns Texture
-	static sf::Font loadFont(std::string location) {
+	static sf::Font loadFont(const std::string& location) {
 		sf::Font font;
 		font.loadFromFile(location);
 		return font;
 	}
 
 	// loads Texture
-	static bool loadFont(sf::Font* ptr, std::string location) {
+	static bool loadFont(sf::Font* ptr, const std::string& location) {
 		return ptr->loadFromFile(location);
 	}
 
 
 	// Creates and saves screenshots
-	static void do_ScreenShot(sf::RenderWindow* window, std::string location) {
+	static void do_ScreenShot(sf::RenderWindow* window, const std::string& location) {
 		std::string string = location + "screenshot_";
 		sf::Texture txt;
 		txt.create(window->getSize().x, window->getSize().y);
