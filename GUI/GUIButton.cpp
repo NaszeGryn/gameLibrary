@@ -4,7 +4,7 @@ namespace GUI {
 	// button class
 	Button::Button(
 		sf::Vector2f pos, sf::Vector2f size, sf::Text* text,
-		sf::Color color, std::string ID
+		sf::Color color, const std::string& ID
 	)
 	{
 		this->event = Event::None;

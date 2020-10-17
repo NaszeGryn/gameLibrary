@@ -2,7 +2,7 @@
 
 namespace GUI {
 	BSBox::BSBox(sf::Vector2f pos, float size, sf::Color color, sf::Color TextColor,
-		std::vector<std::string>& strings, sf::Font* font, int charsize, int def_Val, std::string ID) {
+		std::vector<std::string>& strings, sf::Font* font, int charsize, int def_Val, const std::string& ID) {
 
 		this->strings = strings;
 		this->font = font;

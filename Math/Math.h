@@ -11,6 +11,7 @@
 #define gL_V2IZERO sf::Vector2i(0, 0)
 #define gL_V2UZERO sf::Vector2u(0U, 0U)
 
+
 namespace Math {
 	// Returns distance
 	static float dist(sf::Vector2f a, sf::Vector2f b) {
@@ -117,21 +118,21 @@ namespace Math {
 	}
 
 	//returns avg float
-	static float averageF(std::vector<float> list) {
+	static float averageF(std::vector<float>* list) {
 		float sum = 0.f;
-		for (unsigned i = 0; i < list.size(); i++) {
-			sum += list[i];
+		for (unsigned i = 0; i < list->size(); i++) {
+			sum += (*list)[i];
 		}
-		return sum / (float)list.size();
+		return sum / (float)list->size();
 	}
 
 	//returns avg int
-	static float averageI(std::vector<int> list) {
+	static float averageI(std::vector<int>* list) {
 		int sum = 0;
-		for (unsigned i = 0; i < list.size(); i++) {
-			sum += list[i];
+		for (unsigned i = 0; i < list->size(); i++) {
+			sum += (*list)[i];
 		}
-		return (float)sum / (float)list.size();
+		return (float)sum / (float)list->size();
 	}
 
 	//returns avg unsigned int
@@ -141,6 +142,17 @@ namespace Math {
 			sum += list[i];
 		}
 		return (float)sum / (float)list.size();
+	}
+
+	static sf::Color strHexToColor(const std::string& hexNum) {
+		if (hexNum.length() == 6) {
+			return sf::Color(
+				(uint8_t)strtol(hexNum.substr(0, 2).c_str(), NULL, 16),
+				(uint8_t)strtol(hexNum.substr(0, 2).c_str(), NULL, 16),
+				(uint8_t)strtol(hexNum.substr(0, 2).c_str(), NULL, 16)
+			);
+		}
+		return sf::Color();
 	}
 
 	// clock class

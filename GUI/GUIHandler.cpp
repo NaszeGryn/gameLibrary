@@ -87,7 +87,7 @@ namespace GUI {
 	}
 
 
-	Event GUIHandler::getEvent(std::string ID) {
+	Event GUIHandler::getEvent(const std::string& ID) {
 		for (int i = 0; i < this->elements.size(); i++) {
 			if (elements[i]->getID() == ID)
 				return elements[i]->getEvent();
@@ -95,7 +95,7 @@ namespace GUI {
 		}
 		return Event::None;
 	}
-	ElementType GUIHandler::getElementType(std::string ID) {
+	ElementType GUIHandler::getElementType(const std::string& ID) {
 		for (int i = 0; i < this->elements.size(); i++) {
 			if (elements[i]->getID() == ID) {
 				return elements[i]->getType();
@@ -103,7 +103,7 @@ namespace GUI {
 		}
 		return ElementType::null;
 	}
-	int GUIHandler::getValue(std::string ID) {
+	int GUIHandler::getValue(const std::string& ID) {
 		for (int i = 0; i < this->elements.size(); i++) {
 			if (elements[i]->getID() == ID) {
 				return elements[i]->getValue();
@@ -112,7 +112,7 @@ namespace GUI {
 		return 0;
 	}
 
-	std::string GUIHandler::getIBValue(std::string ID) {
+	std::string GUIHandler::getIBValue(const std::string& ID) {
 		for (int i = 0; i < this->elements.size(); i++) {
 			if (elements[i]->getID() == ID) {
 				return elements[i]->getIBValue();
@@ -121,7 +121,7 @@ namespace GUI {
 		return "";
 	}
 
-	int GUIHandler::getIndex(std::string ID) {
+	int GUIHandler::getIndex(const std::string& ID) {
 		for (int i = 0; i < this->elements.size(); i++) {
 			if (elements[i]->getID() == ID) {
 				return i;
