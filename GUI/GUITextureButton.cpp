@@ -1,14 +1,14 @@
 #include "GUI.h"
 
 namespace GUI {
-	TextureButton::TextureButton(sf::Vector2f pos, sf::Texture& texture, std::string ID) {
+	TextureButton::TextureButton(sf::Vector2f pos, sf::Texture& texture, const std::string& ID) {
 		this->event = Event::None;
 		this->sprite = new sf::Sprite(texture);
 		this->sprite->setPosition(pos);
 		this->ID = ID;
 	}
 
-	TextureButton::TextureButton(sf::Vector2f pos, sf::Texture& texture, sf::IntRect rect, std::string ID) {
+	TextureButton::TextureButton(sf::Vector2f pos, sf::Texture& texture, sf::IntRect rect, const std::string& ID) {
 		this->event = Event::None;
 		this->sprite = new sf::Sprite(texture, rect);
 		this->sprite->setPosition(pos);

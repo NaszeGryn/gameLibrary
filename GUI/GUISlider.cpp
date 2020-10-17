@@ -7,7 +7,7 @@ namespace GUI {
 		float length,
 		sf::Color color,
 		int starting_Val,
-		std::string ID
+		const std::string& ID
 	) 
 	{
 		// rect 1 - underline

@@ -4,7 +4,7 @@
 
 namespace GUI {
 	InputBox::InputBox(sf::Vector2f pos, sf::Vector2f size, int charSize, sf::Color color,
-		sf::Font* font, std::string ID, std::string def_text) {
+		sf::Font* font, const std::string& ID, const std::string& def_text) {
 
 		this->ID = ID;
 		this->event = Event::None;

@@ -6,7 +6,7 @@ namespace GUI {
 	// colorstate 0-false 1-true 2-hover
 
 	TFBox::TFBox(sf::Vector2f pos, float size, sf::Color TrueColor,
-		sf::Color FalseColor, bool def_Val, std::string ID) {
+		sf::Color FalseColor, bool def_Val, const std::string& ID) {
 		this->event = Event::None;
 		this->value = def_Val;
 		this->ID = ID;

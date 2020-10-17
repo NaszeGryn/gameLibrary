@@ -4,7 +4,7 @@ namespace GUI {
 	//constructor
 	TextureBox::TextureBox(
 		sf::Vector2f pos,
-		sf::Texture* texture, std::string ID)
+		sf::Texture* texture, const std::string& ID)
 	{
 		this->sprite = new sf::Sprite(*texture);
 		this->sprite->setPosition(pos);
@@ -15,7 +15,8 @@ namespace GUI {
 	TextureBox::TextureBox(
 		sf::Vector2f pos,
 		sf::Texture* texture,
-		sf::IntRect rect, std::string ID)
+		sf::IntRect rect,
+		const std::string& ID)
 	{
 		this->sprite = new sf::Sprite(*texture, rect);
 		this->sprite->setPosition(pos);

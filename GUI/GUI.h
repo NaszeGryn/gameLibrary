@@ -49,7 +49,7 @@ namespace GUI {
 	public:
 		Button(
 			sf::Vector2f pos, sf::Vector2f size,
-			sf::Text* text, sf::Color color, std::string ID = "");
+			sf::Text* text, sf::Color color, const std::string& ID = "");
 		~Button();
 
 		void Draw(sf::RenderTarget* target);
@@ -80,8 +80,8 @@ namespace GUI {
 	// button class
 	class TextureButton : public GUIElement {
 	public:
-		TextureButton(sf::Vector2f pos, sf::Texture& texture, std::string ID = "");
-		TextureButton(sf::Vector2f pos, sf::Texture& texture, sf::IntRect rect, std::string ID = "");
+		TextureButton(sf::Vector2f pos, sf::Texture& texture, const std::string & = "");
+		TextureButton(sf::Vector2f pos, sf::Texture& texture, sf::IntRect rect, const std::string & = "");
 		~TextureButton();
 		
 		void Draw(sf::RenderTarget* target);
@@ -111,7 +111,7 @@ namespace GUI {
 	public:
 		TextBox(
 			sf::Vector2f pos, sf::Vector2f size,
-			sf::Text* text, sf::Color color, std::string ID = "");
+			sf::Text* text, sf::Color color, const std::string& ID = "");
 		~TextBox();
 
 		void Draw(sf::RenderTarget* target);
@@ -140,12 +140,12 @@ namespace GUI {
 	public:
 		TextureBox(
 			sf::Vector2f pos,
-			sf::Texture* texture, std::string ID = "");
+			sf::Texture* texture, const std::string& ID = "");
 
 		TextureBox(
 			sf::Vector2f pos,
 			sf::Texture* texture,
-			sf::IntRect rect, std::string ID = "");
+			sf::IntRect rect, const std::string& ID = "");
 
 		~TextureBox();
 
@@ -179,7 +179,7 @@ namespace GUI {
 			float length,
 			sf::Color color,
 			int starting_Val = 50,
-			std::string ID = ""
+			const std::string& ID = ""
 			);
 
 		~Slider();
@@ -214,7 +214,7 @@ namespace GUI {
 	//InputBox
 	class InputBox : public GUIElement{
 	public:
-		InputBox(sf::Vector2f pos, sf::Vector2f size, int charSize, sf::Color color, sf::Font* font, std::string ID = "", std::string def_text = "");
+		InputBox(sf::Vector2f pos, sf::Vector2f size, int charSize, sf::Color color, sf::Font* font, const std::string& ID = "", const std::string& def_text = "");
 		~InputBox();
 
 		void Draw(sf::RenderTarget* window);
@@ -246,7 +246,7 @@ namespace GUI {
 	class TFBox : public GUIElement {
 	public:
 		TFBox(sf::Vector2f pos, float size, sf::Color TrueColor,
-			sf::Color FalseColor = sf::Color::Black, bool def_Val = false, std::string ID = "");
+			sf::Color FalseColor = sf::Color::Black, bool def_Val = false, const std::string& ID = "");
 		~TFBox() { ; }
 
 		void Draw(sf::RenderTarget* window);
@@ -281,7 +281,7 @@ namespace GUI {
 	class BSBox : public GUIElement {
 	public:
 		BSBox(sf::Vector2f pos, float size, sf::Color color, sf::Color TextColor,
-			std::vector<std::string>& strings, sf::Font* font, int charsize = 20, int def_Val = 0, std::string ID = "");
+			std::vector<std::string>& strings, sf::Font* font, int charsize = 20, int def_Val = 0, const std::string& ID = "");
 		~BSBox() { ; }
 
 		void Draw(sf::RenderTarget* window);
@@ -348,12 +348,12 @@ namespace GUI {
 		int getValue(int index);
 		std::string getIBValue(int index);
 
-		Event getEvent(std::string ID);
-		ElementType getElementType(std::string ID);
-		int getValue(std::string ID);
-		std::string getIBValue(std::string ID);
+		Event getEvent(const std::string& ID);
+		ElementType getElementType(const std::string& ID);
+		int getValue(const std::string& ID);
+		std::string getIBValue(const std::string& ID);
 
-		int getIndex(std::string ID);
+		int getIndex(const std::string& ID);
 		std::string getID(int index);
 
 	private:

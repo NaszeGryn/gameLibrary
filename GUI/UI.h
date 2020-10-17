@@ -9,7 +9,7 @@
 namespace UI {
 	class File {
 	public:
-		File(std::string filename) {
+		File(const std::string& filename) {
 			std::fstream stream;
 			stream.open(filename, std::ios::in);
 
