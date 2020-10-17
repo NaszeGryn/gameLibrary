@@ -2,7 +2,7 @@
 #include <SFML/Audio.hpp>
 
 namespace Audio {
-	static sf::SoundBuffer getBuffer(std::string location) {
+	static sf::SoundBuffer getBuffer(const std::string& location) {
 		sf::SoundBuffer buffer;
 		buffer.loadFromFile(location);
 		return buffer;
@@ -11,15 +11,15 @@ namespace Audio {
 
 	class Sound {
 	public:
-		Sound(std::string filename, float volume, bool loop) {
+		Sound(const std::string& filename, float volume, bool loop) {
 			this->buffer = new sf::SoundBuffer();
 			this->buffer->loadFromFile(filename);
 			this->sound = new sf::Sound(*this->buffer);
 			this->sound->setVolume(volume);
 			this->sound->setLoop(loop);
 		}
-		Sound(sf::SoundBuffer buffer, float volume, bool loop) {
-			this->buffer = new sf::SoundBuffer(buffer);
+		Sound(sf::SoundBuffer* buffer, float volume, bool loop) {
+			this->buffer = new sf::SoundBuffer(*buffer);
 			this->sound = new sf::Sound(*this->buffer);
 			this->sound->setVolume(volume);
 			this->sound->setLoop(loop);
