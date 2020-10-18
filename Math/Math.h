@@ -137,12 +137,12 @@ namespace Math {
 	}
 
 	//returns avg unsigned int
-	static float averageU(std::vector<unsigned int> list) {
+	static float averageU(std::vector<unsigned int>* list) {
 		int sum = 0;
-		for (unsigned i = 0; i < list.size(); i++) {
-			sum += list[i];
+		for (unsigned i = 0; i < list->size(); i++) {
+			sum += (*list)[i];
 		}
-		return (float)sum / (float)list.size();
+		return (float)sum / (float)list->size();
 	}
 
 	// hex color to sf::Color
@@ -240,8 +240,6 @@ namespace Math {
 			+ intToHexStr((int)color.g, 2) 
 			+ intToHexStr((int)color.b, 2);
 	
-
-
 		if (color.a != 255) {
 			str += intToHexStr((int)color.a, 2);
 		}
