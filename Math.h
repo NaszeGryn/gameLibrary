@@ -1,7 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <cmath>
-#include <iostream>
 
 #define gL_MATH_NEWSEED() srand(int(time(NULL) ) )
 #define gL_MATH_PI 3.1415926535897932384626433
@@ -145,7 +144,6 @@ namespace Math {
 		return (float)sum / (float)list.size();
 	}
 
-	// hex color to sf::Color
 	static sf::Color strHexToColor(const std::string& hexNum) {
 		if (hexNum.length() == 6) {
 			return sf::Color(
@@ -154,24 +152,15 @@ namespace Math {
 				(uint8_t)strtol(hexNum.substr(4, 2).c_str(), NULL, 16)
 			);
 		}
-		else if (hexNum.length() == 8) {
-			return sf::Color(
-				(uint8_t)strtol(hexNum.substr(0, 2).c_str(), NULL, 16),
-				(uint8_t)strtol(hexNum.substr(2, 2).c_str(), NULL, 16),
-				(uint8_t)strtol(hexNum.substr(4, 2).c_str(), NULL, 16),
-				(uint8_t)strtol(hexNum.substr(6, 2).c_str(), NULL, 16)
-			);
-		}
 		return sf::Color();
 	}
 
-	// string to sf::Vector2f
 	static sf::Vector2f strToVec2f(const std::string& line) {
 		std::string v1 = "";
 
 		std::string v2 = "";
 		if (line.length() > 0) {
-			// finding ',' in string
+			// finding '=' in line
 			if (line.find(',') < line.length()) {
 				int eqPos = strcspn(line.c_str(), ",");
 				v1 = line.substr(0, eqPos);
@@ -183,70 +172,6 @@ namespace Math {
 		}
 
 		return sf::Vector2f(atof(v1.c_str()), atof(v2.c_str()));
-	}
-
-	// sf::Vector2f to string
-	static std::string vec2fToStr(sf::Vector2f vector) {
-		return std::to_string(vector.x) + ", " + std::to_string(vector.y);
-	}
-
-	// converts int to hex number
-	static std::string intToHexStr(unsigned int a, uint16_t min_length = 0) {
-		std::string nums = "0123456789ABCDEF";
-		std::string result = "";
-		float num = a;
-		while (floor(num) > 0) {
-			int r = (int)num % 16;
-			result.insert(result.begin(), nums[r]);
-
-			num /= 16;
-		}
-
-		if (min_length != 0) {
-			while (result.length() < min_length) {
-				result.insert(result.begin(), '0');
-			}
-		}
-
-		return result;
-	}
-
-	// converts hex string to number
-	static int hexStrToUInt(const std::string& number) {
-		std::string nums = "0123456789ABCDEF";
-		int result = 0;
-
-		for (int i = number.size()-1; i >= 0; i--) {
-			if (number[i] >= '0' && number[i] <= '9') {
-				result += (number[i] - 48) * (int)pow(16, (number.size()-1)-i);
-			}
-			else if (number[i] >= 'A' && number[i] <= 'F') {
-				result += (number[i] - 55) * (int)pow(16, (number.size() - 1) -i);
-			}
-			else if (number[i] >= 'a' && number[i] <= 'f') {
-				result += (number[i] - 87) * (int)pow(16, (number.size() - 1) -i);
-			}
-			else {
-				return -1;
-			}
-		}
-
-		return result;
-	}
-
-	// sf::Color to string
-	static std::string colToStr(sf::Color color) {
-		std::string str = intToHexStr((int)color.r, 2) 
-			+ intToHexStr((int)color.g, 2) 
-			+ intToHexStr((int)color.b, 2);
-	
-
-
-		if (color.a != 255) {
-			str += intToHexStr((int)color.a, 2);
-		}
-		
-		return str;
 	}
 
 	// clock class
