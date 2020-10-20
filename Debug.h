@@ -9,7 +9,3 @@ static void showV2f(sf::Vector2f a) {
 static void showColor(sf::Color a) {
 	std::cout << "r: " << a.r << ", g: " << a.g << ", b: " << a.b << ", a: " << a.a << std::endl;
 }
-
-static std::string getV2fStr(sf::Vector2f a) {
-	return std::string("x: " + std::to_string(a.x) + ", y: " + std::to_string(a.y));
-}
