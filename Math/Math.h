@@ -101,6 +101,10 @@ namespace Math {
 		return s;
 	}
 
+	static std::string getV2fStr(sf::Vector2f a) {
+		return std::string(std::to_string(a.x) + "," + std::to_string(a.y));
+	}
+
 	// returns avg
 	static sf::Vector2f avgV2f(sf::Vector2f first, sf::Vector2f second) {
 		return sf::Vector2f((first.x + second.x) / 2.f, (first.y + second.y) / 2.f);
@@ -247,28 +251,6 @@ namespace Math {
 		return str;
 	}
 
-	// clock class
-	class Clock {
-	public:
-		Clock() {
-			this->clock = new sf::Clock();
-			this->deltaTime = 0.f;
-		}
-
-		~Clock() {
-			delete this->clock;
-		}
-
-		void Update() {
-			this->deltaTime = clock->restart().asSeconds();
-		}
-
-		double deltaTime;
-
-	private:
-		sf::Clock* clock;
-	};
-
 	class ColorF {
 	public:
 		ColorF(float r = 0.f, float g = 0.f, float b = 0.f, float a = 255.f) {
@@ -290,13 +272,9 @@ namespace Math {
 
 
 		void check() {
-			//r
 			check_One(r);
-			//g
 			check_One(g);
-			//b
 			check_One(b);
-			//a
 			check_One(a);
 		}
 
@@ -343,6 +321,91 @@ namespace Math {
 				x = 0.f;
 		}
 	
+	};
+
+
+	class Counter {
+	public:
+		Counter(int maxValue = 1) {
+			this->actual = 0;
+			this->max = maxValue;
+		}
+
+		bool Update(int value, bool restart = true) {
+			this->actual += value;
+			return this->isDone(restart);
+		}
+	private:
+		bool isDone(bool restart = true) {
+			if (actual >= max) {
+				if (restart)
+					actual = 0.f;
+
+				return true;
+			}
+			return false;
+		}
+
+	private:
+		int actual;
+		int max;
+	};
+}
+
+namespace Time {
+	// clock class
+	class Clock {
+	public:
+		Clock() {
+			this->clock = new sf::Clock();
+			this->deltaTime = 0.f;
+		}
+
+		~Clock() {
+			delete this->clock;
+		}
+
+		void Update() {
+			this->deltaTime = clock->restart().asSeconds();
+		}
+
+		double deltaTime;
+
+	private:
+		sf::Clock* clock;
+	};
+
+	// timer class
+	class Timer {
+	public:
+		Timer(float maxTime = 1.f) {
+			this->loc_Time = 0.f;
+			this->maxTime = maxTime;
+		}
+
+		bool Update(float deltaTime, bool restart = true) {
+			this->loc_Time += deltaTime;
+			return this->isDone(restart);
+		}
+
+		bool CUpdate(Time::Clock& clock, bool restart = true) {
+			this->loc_Time += clock.deltaTime;
+			return this->isDone(restart);
+		}
+
+	private:
+		bool isDone(bool restart = true) {
+			if (loc_Time >= maxTime) {
+				if (restart)
+					loc_Time = 0.f;
+
+				return true;
+			}
+			return false;
+		}
+
+		float loc_Time;
+		float maxTime;
 	};
 }
 
