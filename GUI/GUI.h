@@ -80,8 +80,8 @@ namespace GUI {
 	// button class
 	class TextureButton : public GUIElement {
 	public:
-		TextureButton(sf::Vector2f pos, sf::Texture& texture, const std::string & = "");
-		TextureButton(sf::Vector2f pos, sf::Texture& texture, sf::IntRect rect, const std::string & = "");
+		TextureButton(sf::Vector2f pos, sf::Texture& texture, const std::string & ID = "");
+		TextureButton(sf::Vector2f pos, sf::Texture& texture, sf::IntRect rect, const std::string & ID = "");
 		~TextureButton();
 		
 		void Draw(sf::RenderTarget* target);
