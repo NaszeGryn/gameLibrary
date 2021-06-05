@@ -13,10 +13,10 @@ namespace Particles {
 	class Particle {
 	public:
 		// constructor Particle(float size, sf::Vector2f move, sf::Vector2f pos, float alpha_change, sf::Color color)
-		Particle(float size, sf::Vector2f& move, sf::Vector2f& pos, float alpha_change, sf::Color& color) {
+		Particle(float size, sf::Vector2f& move, sf::Vector2f& pos, float alpha_change, sf::Color& color, int alpha_variety = 0) {
 			this->shape = new sf::CircleShape(size);
 			this->move = move;
-			this->alpha_change = alpha_change;
+			this->alpha_change = alpha_change + (float(rand() % alpha_variety) + float(rand() / RAND_MAX));
 
 			this->shape->setOrigin(sf::Vector2f(size, size));
 			this->shape->setPosition(pos);
@@ -78,13 +78,19 @@ namespace Particles {
 		// constructor (float size, float rot, sf::Vector2f pos, float alpha_change,
 		//sf::Color color, Type type, int span, float speed, int particle_amount)
 		ParticleHandler(float size, float rot, sf::Vector2f pos, float alpha_change,
-				sf::Color color, Type type, int span, float speed, int particle_amount) {
+				sf::Color color, Type type, int span, float speed, int particle_amount, bool add_all = false, int alpha_variety = 0) {
 
 			this->ReConstruct(size, rot, pos, alpha_change,
-				color, type, span, speed, particle_amount);
-
-			for (size_t i = 0; i < particles.size(); i++) {
-				this->particles[i] = NULL;
+				color, type, span, speed, particle_amount, alpha_variety);
+			if (add_all) {
+				for (size_t i = 0; i < particles.size(); i++) {
+					this->Add_Particle(i);
+				}
+			}
+			else {
+				for (size_t i = 0; i < particles.size(); i++) {
+					this->particles[i] = NULL;
+				}
 			}
 		}
 		~ParticleHandler() {
@@ -104,7 +110,7 @@ namespace Particles {
 			angle *= 3.14159f / 180.f;
 			sf::Vector2f a(move.x * cosf(angle) - move.y * sinf(angle),
 				move.x * sinf(angle) + move.y * cosf(angle));
-			this->particles[index] = new Particle(size, a, pos, alpha_change, color);
+			this->particles[index] = new Particle(size, a, pos, alpha_change, color, alpha_variety);
 		}
 
 		void Reset_Particle(int index) {
@@ -171,7 +177,7 @@ namespace Particles {
 		void creatMem();
 
 		void ReConstruct(float size, float rot, sf::Vector2f pos, float alpha_change,
-			sf::Color color, Type type, int span, float speed, int particle_amount);
+			sf::Color color, Type type, int span, float speed, int particle_amount, int alpha_variety);
 
 		// Setting and getting
 		void setDrawing(bool draw);
@@ -202,6 +208,15 @@ namespace Particles {
 		void changeAlphaChange(float newAlpha_change);
 		float getAlpha_change();
 
+
+		bool all_finished() {
+			for (size_t i = 0; i < particles.size(); i++) {
+				if (!this->particles[i]->finished()) {
+					return false;
+				}
+			}
+			return true;
+		}
 	private:
 		std::vector<Particle*> particles;
 
@@ -213,6 +228,7 @@ namespace Particles {
 		float size;
 		int span;
 		Type type;
+		int alpha_variety;
 
 	private:
 		bool adding;

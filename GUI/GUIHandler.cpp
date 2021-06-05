@@ -61,6 +61,11 @@ namespace GUI {
 		}
 	}
 
+	void GUIHandler::clear() {
+		this->elements.clear();
+		this->mRD = this->miRD;
+	}
+
 	size_t GUIHandler::getArraySize() {
 		return this->elements.size();
 	}

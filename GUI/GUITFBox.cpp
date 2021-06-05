@@ -67,6 +67,7 @@ namespace GUI {
 			if (event.type == sf::Event::MouseButtonPressed) {
 				if (event.mouseButton.button == sf::Mouse::Button::Left) {
 					this->value = !this->value;
+					this->event = Event::NewVal;
 				}
 			}
 		}

@@ -71,64 +71,70 @@ namespace Draw {
 	class GradientRect {
 	public:
 		GradientRect(sf::FloatRect pas, GradientType type, sf::Color colorA, sf::Color colorB) {
-			std::vector<sf::Color> colors;
+			std::vector<sf::Color>* colors;
 
-			rect.setPrimitiveType(sf::Quads);
+			this->rect.setPrimitiveType(sf::Quads);
+			switch (type) {
+			case GradientType::LeftToRight:
+					for (int i = 0; i < 2; i++) {
+						colors->push_back(colorA);
+						colors->push_back(colorB);
+					}
+					break;
+			case GradientType::TopToBottom: 
+					colors->push_back(colorA);
+					colors->push_back(colorA);
 
-			if (type == GradientType::LeftToRight) {
-				for (int i = 0; i < 2; i++) {
-					colors.push_back(colorA);
-					colors.push_back(colorB);
-				}
-			}
-			else if (type == GradientType::TopToBottom) {
-				colors.push_back(colorA);
-				colors.push_back(colorA);
-
-				colors.push_back(colorB);
-				colors.push_back(colorB);
-			}
-			else if (type == GradientType::TopLeftToBottomRight) {
-				colors.push_back(colorA);
-				colors.push_back(Math::avgColor(colorA, colorB));
-				colors.push_back(Math::avgColor(colorA, colorB));
-				colors.push_back(colorB);
-			}
-			else if (type == GradientType::TopRightToBottomLeft) {
-				colors.push_back(Math::avgColor(colorA, colorB));
-				colors.push_back(colorA);
-				colors.push_back(colorB);
-				colors.push_back(Math::avgColor(colorA, colorB));
-			}
-			else if (type == GradientType::TopLeft) {
-				colors.push_back(colorB);
-				colors.push_back(colorA);
-				colors.push_back(colorA);
-				colors.push_back(colorA);
-			}
-			else if (type == GradientType::TopRight) {
-				colors.push_back(colorA);
-				colors.push_back(colorB);
-				colors.push_back(colorA);
-				colors.push_back(colorA);
-			}
-			else if (type == GradientType::BottomLeft) {
-				colors.push_back(colorA);
-				colors.push_back(colorA);
-				colors.push_back(colorB);
-				colors.push_back(colorA);
-			}
-			else if (type == GradientType::BottomRight) {
-				colors.push_back(colorA);
-				colors.push_back(colorA);
-				colors.push_back(colorA);
-				colors.push_back(colorB);
+					colors->push_back(colorB);
+					colors->push_back(colorB);
+					break;
+			case GradientType::TopLeftToBottomRight:
+					colors->push_back(colorA);
+					colors->push_back(Math::avgColor(colorA, colorB));
+					colors->push_back(Math::avgColor(colorA, colorB));
+					colors->push_back(colorB);
+					break;
+			case GradientType::TopRightToBottomLeft:
+					colors->push_back(Math::avgColor(colorA, colorB));
+					colors->push_back(colorA);
+					colors->push_back(colorB);
+					colors->push_back(Math::avgColor(colorA, colorB));
+					break;
+			case GradientType::TopLeft:
+					colors->push_back(colorB);
+					colors->push_back(colorA);
+					colors->push_back(colorA);
+					colors->push_back(colorA);
+					break;
+			case GradientType::TopRight:
+					colors->push_back(colorA);
+					colors->push_back(colorB);
+					colors->push_back(colorA);
+					colors->push_back(colorA);
+					break;
+			case GradientType::BottomLeft:
+					colors->push_back(colorA);
+					colors->push_back(colorA);
+					colors->push_back(colorB);
+					colors->push_back(colorA);
+					break;
+			case GradientType::BottomRight:
+					colors->push_back(colorA);
+					colors->push_back(colorA);
+					colors->push_back(colorA);
+					colors->push_back(colorB);
+					break;
 			}
 
-			this->rect.append(sf::Vertex(sf::Vector2f(pas.left, pas.top), colors[0]));
-			this->rect.append(sf::Vertex(sf::Vector2f(pas.left + pas.width, pas.top), colors[1]));
-			this->rect.append(sf::Vertex(sf::Vector2f(pas.left + pas.width, pas.top + pas.height), colors[3]));
-			this->rect.append(sf::Vertex(sf::Vector2f(pas.left, pas.top + pas.height), colors[2]));
+			this->rect.append(sf::Vertex(sf::Vector2f(pas.left, pas.top), (*colors)[0]));
+			this->rect.append(sf::Vertex(sf::Vector2f(pas.left + pas.width, pas.top), (*colors)[1]));
+			this->rect.append(sf::Vertex(sf::Vector2f(pas.left + pas.width, pas.top + pas.height), (*colors)[3]));
+			this->rect.append(sf::Vertex(sf::Vector2f(pas.left, pas.top + pas.height), (*colors)[2]));
+			
+			
+			colors->clear();
+			delete colors;
+			colors = NULL;
 		}
 
 		void Draw(sf::RenderWindow* window) {

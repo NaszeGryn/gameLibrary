@@ -1,4 +1,5 @@
 #pragma once
+#define gameLibrary 1
 #include "Math/Math.h"
 
 #include "Graphics/Graphics.h"

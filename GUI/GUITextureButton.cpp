@@ -25,14 +25,21 @@ namespace GUI {
 	}
 
 	void TextureButton::Update(float deltaTime, sf::RenderWindow* window) {
-		;
+		if (this->sprite->getGlobalBounds().contains(
+			sf::Vector2f(sf::Mouse::getPosition(*window)))) {
+
+			this->hover = true;
+
+		}
+		else {
+			this->hover = false;
+		}
 	}
 
 	void TextureButton::EventUpdate(sf::Event ev) {
 		if (ev.type == sf::Event::MouseButtonPressed &&
 			ev.mouseButton.button == sf::Mouse::Button::Left) {
-			if (this->sprite->getGlobalBounds().contains(
-				sf::Vector2f(sf::Mouse::getPosition()))) {
+			if (this->hover) {
 				this->event = Event::Clicked;
 			}
 		}
