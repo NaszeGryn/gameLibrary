@@ -91,7 +91,7 @@ namespace Particles {
 	// reconstruct
 
 	void ParticleHandler::ReConstruct(float size, float rot, sf::Vector2f pos, float alpha_change,
-		sf::Color color, Type type, int span, float speed, int particle_amount) {
+		sf::Color color, Type type, int span, float speed, int particle_amount, int alpha_variety) {
 		this->drawing = true;
 		this->adding = true;
 
@@ -109,6 +109,7 @@ namespace Particles {
 
 		this->particles.resize(particle_amount);
 		this->pos = pos;
+		this->alpha_variety = alpha_variety;
 	}
 
 
