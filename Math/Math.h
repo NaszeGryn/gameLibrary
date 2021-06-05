@@ -5,7 +5,7 @@
 
 #define gL_MATH_NEWSEED() srand(int(time(NULL) ) )
 #define gL_MATH_PI 3.1415926535897932384626433
-#define gL_MATH_RADIAN 180/MATH_PI
+#define gL_MATH_RADIAN 180/gL_MATH_PI
 
 
 #define gL_V2FZERO sf::Vector2f(0.f, 0.f)
@@ -16,7 +16,7 @@
 namespace Math {
 	// Returns distance
 	static float dist(sf::Vector2f a, sf::Vector2f b) {
-		return sqrt( pow((a - b).x, 2) + pow((a - b).y, 2) );
+		return sqrt( (a - b).x * (a - b).x + (a - b).y * (a - b).y) ;
 	}
 
 	// Returns normalized vector
@@ -29,7 +29,7 @@ namespace Math {
 		float ab = (start - nxt).y;
 		float ac = sqrt(((start - nxt).x * (start - nxt).x) + ((start - nxt).y * (start - nxt).y));
 
-		float angle = float(asin(ab / ac) * (180 / 3.14159f)) - 90.f;
+		float angle = float(asin(ab / ac) * gL_MATH_RADIAN) - 90.f;
 
 		angle = abs(angle);
 		return angle;
@@ -45,7 +45,6 @@ namespace Math {
 
 	static float getTriangleArea(sf::Vector2f a, sf::Vector2f b, sf::Vector2f c) {
 		return abs(a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x*(a.y - b.y)) / 2.f;
-
 	}
 
 	// returns absolute value of Vector2fs
@@ -369,7 +368,7 @@ namespace Time {
 			this->deltaTime = clock->restart().asSeconds();
 		}
 
-		double deltaTime;
+		float deltaTime;
 
 	private:
 		sf::Clock* clock;
