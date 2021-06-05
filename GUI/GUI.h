@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "UI.h"
-
+#include <gameLibrary/Debug.h>
 #define gL_defaultGuiColor sf::Color(40, 40, 40, 180)
 
 namespace GUI {
@@ -71,6 +71,7 @@ namespace GUI {
 		sf::Text* text;
 		sf::Color color;
 
+		bool hover;
 	private:
 		Event event;
 		float alpha;
@@ -100,6 +101,8 @@ namespace GUI {
 
 	private:
 		sf::Sprite* sprite;
+
+		bool hover;
 	private:
 		Event event;
 		std::string ID;
@@ -252,7 +255,7 @@ namespace GUI {
 		void Draw(sf::RenderTarget* window);
 		void Update(float deltaTime, sf::RenderWindow* window);
 		void EventUpdate(sf::Event event);
-		Event getEvent() { return this->event; }
+		Event getEvent() { Event e = this->event; this->event = Event::None; return e; }
 		ElementType getType() { return ElementType::TFBox; }
 		int getValue() { return this->value; }
 		std::string getIBValue() { return ""; }
@@ -280,28 +283,30 @@ namespace GUI {
 
 	class BSBox : public GUIElement {
 	public:
-		BSBox(sf::Vector2f pos, float size, sf::Color color, sf::Color TextColor,
+		BSBox(sf::Vector2f pos, sf::Vector2f size, sf::Color color, sf::Color TextColor,
 			std::vector<std::string>& strings, sf::Font* font, int charsize = 20, int def_Val = 0, const std::string& ID = "");
 		~BSBox() { ; }
 
 		void Draw(sf::RenderTarget* window);
 		void Update(float deltaTime, sf::RenderWindow* window);
 		void EventUpdate(sf::Event event);
-		Event getEvent() { return this->event; }
+		Event getEvent() { Event e = this->event; this->event = Event::None; return e; }
 		ElementType getType() { return ElementType::BSBox; }
 		int getValue() { return this->value; }
 		std::string getIBValue() { return ""; }
 
-		sf::Vector2f maxRD() { return this->maxRDv; }
-		sf::Vector2f minRD() { return this->minRDv; }
+		sf::Vector2f maxRD() { return pointers[1].getPosition() + pointers[1].getSize(); }
+		sf::Vector2f minRD() { return pointers[0].getPosition(); }
 		std::string getID() { return this->ID; }
 
 	private:
 		void checkVal() {
-			if (value < 0)
+			if (value < 0) {
 				value = 0;
-			else if (value > strings.size() - 1)
+			}
+			else if (value > strings.size() - 1) {
 				value = strings.size() - 1;
+			}
 		}
 
 		bool hoverTriangle1(sf::Vector2f mouse);
@@ -316,11 +321,9 @@ namespace GUI {
 		Event event;
 		int value;
 
-		sf::Vector2f minRDv;
-		sf::Vector2f maxRDv;
 		int hover;
 	private:
-		std::vector<sf::VertexArray> pointers;
+		std::vector<sf::RectangleShape> pointers;
 		sf::Text middleText;
 
 	private:
@@ -340,6 +343,8 @@ namespace GUI {
 		void Draw(sf::RenderTarget* target);
 		void Update(float deltaTime, sf::RenderWindow* window);
 		void EventUpdate(sf::Event event);
+
+		void clear();
 
 		size_t getArraySize();
 

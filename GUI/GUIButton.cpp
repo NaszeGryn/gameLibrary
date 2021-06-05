@@ -46,13 +46,14 @@ namespace GUI {
 		if (this->shape->getGlobalBounds().contains(
 			sf::Vector2f(sf::Mouse::getPosition(*window)))) {
 			
+			this->hover = true;
 			if (this->alpha < 240) {
 				this->alpha += deltaTime * 60;
 			}
 
 		}
 		else {
-
+			this->hover = false;
 			if (this->alpha > 180) {
 				this->alpha -= deltaTime * 60;
 			}
@@ -66,8 +67,7 @@ namespace GUI {
 	void Button::EventUpdate(sf::Event ev) {
 		if (ev.type == sf::Event::MouseButtonPressed &&
 			ev.mouseButton.button == sf::Mouse::Button::Left) {
-			if (this->shape->getGlobalBounds().contains(
-				sf::Vector2f(sf::Mouse::getPosition()))) {
+			if (this->hover) {
 				this->event = Event::Clicked;
 			}
 		}
