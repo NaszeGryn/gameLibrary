@@ -171,11 +171,8 @@ namespace Collisions {
 					ySum += ((*co1->getPoly()).at(x).y);
 				}
 
-				sf::Vector2f center(
-					xSum / (float)co1->getPoly()->size(),
-					ySum / (float)co1->getPoly()->size());
-
-				sf::Vector2f l_start = center;
+				sf::Vector2f l_start( xSum / (float)co1->getPoly()->size(), ySum / (float)co1->getPoly()->size());
+				
 				for (int i = 0; i < co1->getPoly()->size(); i++) {
 					sf::Vector2f l_end = (*co1->getPoly())[i];
 					//std::cout << "L1 end: x: " << l_end.x << ", y: " << l_end.y << std::endl;
