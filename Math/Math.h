@@ -5,7 +5,8 @@
 
 #define gL_MATH_NEWSEED() srand(int(time(NULL) ) )
 #define gL_MATH_PI 3.1415926535897932384626433
-#define gL_MATH_RADIAN 180/gL_MATH_PI
+#define gL_180_d_MATH_PI 0.0174532925
+#define gL_MATH_RADIAN 180/MATH_PI
 
 
 #define gL_V2FZERO sf::Vector2f(0.f, 0.f)
@@ -16,7 +17,7 @@
 namespace Math {
 	// Returns distance
 	static float dist(sf::Vector2f a, sf::Vector2f b) {
-		return sqrt( (a - b).x * (a - b).x + (a - b).y * (a - b).y) ;
+		return sqrt( pow((a - b).x, 2) + pow((a - b).y, 2) );
 	}
 
 	// Returns normalized vector
@@ -29,7 +30,7 @@ namespace Math {
 		float ab = (start - nxt).y;
 		float ac = sqrt(((start - nxt).x * (start - nxt).x) + ((start - nxt).y * (start - nxt).y));
 
-		float angle = float(asin(ab / ac) * gL_MATH_RADIAN) - 90.f;
+		float angle = float(asin(ab / ac) * (180 / 3.14159f)) - 90.f;
 
 		angle = abs(angle);
 		return angle;
@@ -45,6 +46,7 @@ namespace Math {
 
 	static float getTriangleArea(sf::Vector2f a, sf::Vector2f b, sf::Vector2f c) {
 		return abs(a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x*(a.y - b.y)) / 2.f;
+
 	}
 
 	// returns absolute value of Vector2fs
@@ -54,12 +56,16 @@ namespace Math {
 
 	// returns random int
 	static int randomI(int a, int b) {
-		return (rand() % (a - b) + a);
+		if (a - b != 0) {
+			return (rand() % (a - b) + a);
+		}
+		else 
+			return 0;
 	}
 
 	// returns random float
 	static float randomF(int a, int b) {
-		return float(randomI(a, b-1)) + (float)rand() / (float)RAND_MAX;
+		return float(randomI(a, b - 1)) + (float)rand() / (float)RAND_MAX;
 	}
 
 	// returns random Vector2i
@@ -114,9 +120,14 @@ namespace Math {
 		return sf::Color((a.r + b.r) / 2, (a.g + b.g) / 2, (a.b + b.b) / 2);
 	}
 
+	// returns avg fast
+	static sf::Color avgColorFast(sf::Color a, sf::Color b) {
+		return sf::Color((a.r + b.r) >> 1, (a.g + b.g) >> 1, (a.b + b.b) >> 1);
+	}
+
 	// rotates point around (0,0)
 	static sf::Vector2f rotateArZero(sf::Vector2f point, float angle) {
-		angle *= 3.14159f / 180.f;
+		angle *= gL_180_d_MATH_PI;
 		return sf::Vector2f(point.x * cos(angle) - point.y * sin(angle),
 							point.x * sin(angle) + point.y * cos(angle));
 	}
@@ -202,7 +213,7 @@ namespace Math {
 			int r = (int)num % 16;
 			result.insert(result.begin(), nums[r]);
 
-			num /= 16;
+			num /= 16.f;
 		}
 
 		if (min_length != 0) {
@@ -213,6 +224,8 @@ namespace Math {
 
 		return result;
 	}
+
+
 
 	// converts hex string to number
 	static int hexStrToUInt(const std::string& number) {
@@ -368,7 +381,7 @@ namespace Time {
 			this->deltaTime = clock->restart().asSeconds();
 		}
 
-		float deltaTime;
+		double deltaTime;
 
 	private:
 		sf::Clock* clock;
