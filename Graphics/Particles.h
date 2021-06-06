@@ -1,7 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Math/Math.h"
-#include "Debug.h"
 
 namespace Particles {
 	enum ParticleType {
@@ -91,6 +90,9 @@ namespace Particles {
 
 		void Draw(sf::RenderTarget* target);
 
+		void changeAdding(bool adding) {
+			this->adding = adding;
+		}
 	private:
 		bool adding;
 		ParticleProperties prop;
