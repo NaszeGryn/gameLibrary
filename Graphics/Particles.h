@@ -1,237 +1,110 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <cmath>
+#include "Math/Math.h"
 
 namespace Particles {
-	// Particle type
-	enum class Type {
+	enum ParticleType {
 		Line = 0,
 		Out = 1
 	};
 
-	// Particle class
+	// float s_Size, float e_Size, float rot_Speed, sf::Vector2f pos, sf::Vector2f move, sf::Color s_Color, float l_Time = 1.f
+	struct ParticleProperties {
+		ParticleProperties() { ; }
+		// float s_Size, float e_Size, float rot_Speed, sf::Vector2f pos, sf::Vector2f move, sf::Color s_Color, float l_Time = 1.f
+		ParticleProperties(float s_Size, float e_Size, float rot_Speed,
+			sf::Vector2f pos, sf::Vector2f move, sf::Color s_Color, float l_Time = 1.f) {
+			this->StartSize = s_Size;
+			this->EndSize = e_Size;
+			this->rotation_speed = rot_Speed;
+			this->position = pos;
+			this->move_Dir = move;
+			this->startColor = s_Color;
+			this->lifeTime = l_Time;
+		}
+
+		float StartSize, EndSize;
+		float rotation_speed;
+		sf::Vector2f position;
+		sf::Vector2f move_Dir;
+
+		sf::Color startColor;
+
+		float lifeTime = 1.f;
+	};
+
+	// ParticleType particle_Type, uint16_t vector_Size, int span = 0, int l_Variety = 1, float max_a_percent = 1.f
+	struct ParticleHandlerProperties {
+		ParticleHandlerProperties() { ; }
+		// ParticleType particle_Type, uint16_t vector_Size, int span = 0, int l_Variety = 1, float max_a_percent = 1.f
+		ParticleHandlerProperties(ParticleType p_Type, uint16_t v_Size, int sp, int l_Variety, float max_a_percent) {
+			this->type = p_Type;
+			this->vectorSize = v_Size;
+			this->span = sp;
+			this->lifetime_Variety = l_Variety;
+			this->max_add_percent = max_a_percent;
+		}
+		ParticleType type;
+		uint16_t vectorSize;
+
+		int span;
+		int lifetime_Variety;
+
+		float max_add_percent;
+	};
+
 	class Particle {
 	public:
-		// constructor Particle(float size, sf::Vector2f move, sf::Vector2f pos, float alpha_change, sf::Color color)
-		Particle(float size, sf::Vector2f& move, sf::Vector2f& pos, float alpha_change, sf::Color& color, int alpha_variety = 0) {
-			this->shape = new sf::CircleShape(size);
-			this->move = move;
-			this->alpha_change = alpha_change + (float(rand() % alpha_variety) + float(rand() / RAND_MAX));
-
-			this->shape->setOrigin(sf::Vector2f(size, size));
-			this->shape->setPosition(pos);
-			this->shape->setFillColor(color);
-
-			this->alpha = 255;
-			this->color = color;
+		Particle() {
+			this->prop = ParticleProperties();
+			this->part = sf::RectangleShape();
+			this->alpha = 255.f;
+			this->rem_time = 0.f;
 		}
-		~Particle() {
-			delete this->shape;
-			this->shape = NULL;
-		}
+		Particle(const ParticleProperties& properties);
 
-		void set(sf::Vector2f& move, sf::Vector2f& pos) {
-			this->move = move;
-
-			this->shape->setPosition(pos);
-
-			this->alpha = 255;
-			this->color = color;
-		}
-
-		void update(float dtime) {
-			if (alpha > 10) {
-				this->shape->move(this->move * dtime);
-				this->alpha -= this->alpha_change * dtime;
-
-				this->color.a = (uint8_t) this->alpha;
-				this->shape->setFillColor(color);
-			}
-		}
-
-		void draw(sf::RenderTarget* target) {
-			target->draw(*shape);
-		}
-
+		void Update(float dtime);
+		void Draw(sf::RenderTarget* target);
+		
+		void reStart(const ParticleProperties& properties);
+	public:
 		bool finished() {
-			return this->alpha <= 10.f;
-		}
-
-		sf::Vector2f getPos() {
-			return this->shape->getPosition();
+			return (this->rem_time <= 0.f);
 		}
 
 	private:
-		sf::CircleShape* shape;
-
-	private:
-		sf::Vector2f move;
-		sf::Color color;
-		float alpha_change;
+		ParticleProperties prop;
+		float rem_time;
 		float alpha;
+
+	private:
+		sf::RectangleShape part;
+
 	};
 
-	
-	// Particle handler
 	class ParticleHandler {
 	public:
-		// constructor (float size, float rot, sf::Vector2f pos, float alpha_change,
-		//sf::Color color, Type type, int span, float speed, int particle_amount)
-		ParticleHandler(float size, float rot, sf::Vector2f pos, float alpha_change,
-				sf::Color color, Type type, int span, float speed, int particle_amount, bool add_all = false, int alpha_variety = 0) {
+		ParticleHandler(ParticleHandlerProperties& h_properties, ParticleProperties& properties, bool adding);
 
-			this->ReConstruct(size, rot, pos, alpha_change,
-				color, type, span, speed, particle_amount, alpha_variety);
-			if (add_all) {
-				for (size_t i = 0; i < particles.size(); i++) {
-					this->Add_Particle(i);
-				}
-			}
-			else {
-				for (size_t i = 0; i < particles.size(); i++) {
-					this->particles[i] = NULL;
-				}
-			}
+		void Update(float dtime);
+
+		void Draw(sf::RenderTarget* target);
+
+		void changeAdding(bool adding) {
+			this->adding = adding;
 		}
-		~ParticleHandler() {
-			this->particles.clear();
-		}
-
-		void Add_Particle(int index) {
-			float angle = 0.f;
-			if (this->type == Type::Line) {
-				if (span != 0)
-					angle = float((rand() % span * 2) - span) + (float)rand() / (float)RAND_MAX;
-			}
-			else {
-				angle = rand() % 360 + (float)rand() / (float)RAND_MAX;
-			}
-
-			angle *= 3.14159f / 180.f;
-			sf::Vector2f a(move.x * cosf(angle) - move.y * sinf(angle),
-				move.x * sinf(angle) + move.y * cosf(angle));
-			this->particles[index] = new Particle(size, a, pos, alpha_change, color, alpha_variety);
-		}
-
-		void Reset_Particle(int index) {
-			float angle = 0.f;
-			if (this->type == Type::Line) {
-				if (span != 0)
-					angle = float((rand() % span * 2) - span) + (float)rand() / (float)RAND_MAX;
-			}
-			else {
-				angle = rand() % 360 + (float)rand() / (float)RAND_MAX;
-			}
-
-			angle *= 3.14159f / 180.f;
-			sf::Vector2f a(move.x * cos(angle) - move.y * sin(angle),
-				move.x * sin(angle) + move.y * cos(angle));
-			(*this->particles[index]).set(a, pos);
-		}
-
-		void Draw(sf::RenderTarget* target) {
-			bool atZero = false;
-			if (this->drawing) {
-				for (size_t i = 0; i < particles.size(); i++) {
-					if (this->particles[i] != NULL) {
-						if (!this->particles[i]->finished()) {
-
-							if (this->particles[i]->getPos() == this->pos) {
-								if (!atZero) {
-									this->particles[i]->draw(target);
-									atZero = true;
-								}
-							}
-							else {
-								this->particles[i]->draw(target);
-							}
-						}
-					}
-				}
-			}
-		}
-
-		void Update(float dtime) {
-			if (drawing) {
-				int maxu = 0;
-				for (size_t i = 0; i < particles.size(); i++) {
-					if (this->particles[i] != NULL) {
-						if (this->particles[i]->finished() && maxu < 1 && adding) {
-							this->Reset_Particle(i);
-							maxu++;
-						}
-						
-						this->particles[i]->update(dtime);
-					}
-					else {
-						if (maxu < 1 && adding) {
-							this->Add_Particle(i);
-							maxu++;
-						}
-					}
-				}
-			}
-		}
-
-		void clearMem();
-		void creatMem();
-
-		void ReConstruct(float size, float rot, sf::Vector2f pos, float alpha_change,
-			sf::Color color, Type type, int span, float speed, int particle_amount, int alpha_variety);
-
-		// Setting and getting
-		void setDrawing(bool draw);
-		bool getDrawing();
-
-		void setAdding(bool add);
-
-		bool getAdding();
-
-		void changePos(sf::Vector2f newPos);
-		sf::Vector2f getPos();
-
-		void changeColor(sf::Color newColor);
-		sf::Color getColor();
-
-		void changeSpan(int newSpan);
-		int getSpan();
-
-		void changeType(Type newType);
-		Type getType();
-
-		void changeMoveVector(sf::Vector2f newMove);
-		sf::Vector2f getMove();
-
-		void changeSize(float newSize);
-		float getSize();
-		
-		void changeAlphaChange(float newAlpha_change);
-		float getAlpha_change();
-
-
-		bool all_finished() {
-			for (size_t i = 0; i < particles.size(); i++) {
-				if (!this->particles[i]->finished()) {
-					return false;
-				}
-			}
-			return true;
-		}
-	private:
-		std::vector<Particle*> particles;
-
-	private:
-		sf::Vector2f move;
-		sf::Vector2f pos;
-		sf::Color color;
-		float alpha_change;
-		float size;
-		int span;
-		Type type;
-		int alpha_variety;
-
 	private:
 		bool adding;
-		bool drawing;
+		ParticleProperties prop;
+		ParticleHandlerProperties handler_properties;
+		std::vector<Particle> particles;
+
+		float time_between_adding;
+		int max_add;
+
+	private:
+		void RefreshParticles(float dtime);
+		void AddParticles();
 	};
+
 }
