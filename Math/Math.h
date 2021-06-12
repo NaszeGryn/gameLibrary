@@ -362,6 +362,11 @@ namespace Math {
 		int actual;
 		int max;
 	};
+
+	static int timeToFPS(float dtime) { //p7.1.0
+		return int(1.f / dtime);
+	}
+
 }
 
 namespace Time {
