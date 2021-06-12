@@ -2,7 +2,7 @@
 #include <vector>
 
 namespace Sort {
-    static int partition(std::vector<int>& tab, int p, int q)
+    static int partition(std::vector<int>& tab, int p, int q) //p7.1.0
     {
         int x = tab[p];
         int i = p;
@@ -21,7 +21,7 @@ namespace Sort {
         return i;
     }
 
-    static void quickSort(std::vector<int>& tab, int p, int q)
+    static void quickSort(std::vector<int>& tab, int p, int q)//p7.1.0
     {
         int r;
         if (p < q)
@@ -33,7 +33,7 @@ namespace Sort {
     }
 
     // float
-    static int partitionf(std::vector<float>& tab, int p, int q)
+    static int partitionf(std::vector<float>& tab, int p, int q)// p7.1.0
     {
         float x = tab[p];
         int i = p;
@@ -52,7 +52,7 @@ namespace Sort {
         return i;
     }
 
-    static void quickSortf(std::vector<float>& tab, int p, int q)
+    static void quickSortf(std::vector<float>& tab, int p, int q)// p7.1.0
     {
         int r;
         if (p < q)
@@ -63,13 +63,13 @@ namespace Sort {
         }
     }
 
-    static void reverse(std::vector<int>& tab) {
+    static void reverse(std::vector<int>& tab) {// p7.1.0
         for (int i = 0; i < tab.size() / 2; i++) {
             std::swap(tab[i], tab[tab.size() - i - 1]);
         }
     }
 
-    static void reversef(std::vector<float>& tab) {
+    static void reversef(std::vector<float>& tab) {// p7.1.0
         for (int i = 0; i < tab.size() / 2; i++) {
             std::swap(tab[i], tab[tab.size() - i - 1]);
         }
